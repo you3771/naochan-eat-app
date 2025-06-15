@@ -1,0 +1,132 @@
+/* style.css */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background: url("ui/background_img.png") repeat;
+  background-size: auto;
+  text-align: center;
+  position: relative;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+
+header {
+  height: 120px;
+  background-color: #f48ca7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+header img {
+  width: 80%;
+  max-width: 600px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.tap-guide {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+  color: #333;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 6px 12px;
+  border-radius: 12px;
+  z-index: 3;
+  top: 180px;
+  white-space: nowrap;
+}
+
+.meter {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 500px;
+  height: auto;
+  z-index: 2;
+  top: 250px; /* header(120px) + 120px spacing */
+}
+
+.meter img {
+  width: 100%;
+  height: auto;
+}
+
+.naochan {
+  position: absolute;
+  bottom: 260px; /* テーブルの上に少し余白を持たせて表示 */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 400px;
+  height: auto;
+  z-index: 1; /* テーブルのz-index(2)よりも小さくする */
+}
+
+.table-img {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150%;
+  height: auto;
+  z-index: 2;
+}
+
+.foods {
+  position: absolute;
+  bottom: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+
+.foods .row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 0px;
+}
+
+.foods img {
+  width: 100px;
+  height: auto;
+}
+
+.button-wrapper {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  width: 90%;
+  max-width: 400px;
+}
+
+.button-wrapper button {
+  background: none;
+  border: none;
+  padding: 0;
+  width: auto;
+  height: auto;
+  cursor: pointer;
+  background-image: url("ui/button_0.png");  /* 通常時の画像 */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 4 / 1;
+}
+
+.button-wrapper button:active {
+  background-image: url("ui/button_1.png");  /* 押したときの画像 */
+  box-shadow: none;
+  transform: translateY(2px);
+}
