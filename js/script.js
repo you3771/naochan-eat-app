@@ -3,6 +3,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const naochan = document.querySelector(".naochan");
   const meter = document.querySelector(".meter img");
   const button = document.querySelector(".button-wrapper button");
+  const tapGuide = document.querySelector(".tap-guide");
 
   const sounds = {
     itadakimasu: new Audio("sound/voice_itadakimasu.mp3"),
@@ -54,6 +55,7 @@ window.addEventListener("DOMContentLoaded", () => {
 naochan.addEventListener("click", () => {
   if (hasStarted) return; // 2回以上再生しない
   hasStarted = true;
+  tapGuide.style.display = "none";
 
   // 画像を「いただきます」用に差し替え
   naochan.src = "naochan/naochan_full.png";
@@ -72,9 +74,10 @@ naochan.addEventListener("click", () => {
     if (eating) return;
     sounds.gochisousama.play();
     eatCount = 0;
-    hasStarted = false; // ← 初期化
+    hasStarted = false;
     meter.src = "ui/meter_0.png";
     naochan.src = "naochan/naochan_normal.png";
     foodImages.forEach(img => (img.style.display = "inline"));
+    tapGuide.style.display = "block";
   });
 });
