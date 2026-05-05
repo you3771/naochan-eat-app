@@ -59,25 +59,12 @@ header img {
 }
 
 .meter img {
-  width: 100%;
+  width: 75%;
   height: auto;
   display: block;
+  margin: 0 auto;
 }
 
-/* --- ガイド文 --- */
-.tap-guide {
-  font-family: 'Kosugi Maru', sans-serif;
-  font-size: 18px;
-  color: #333;
-  background: rgba(255, 255, 255, 0.7);
-  padding: 6px 12px;
-  border-radius: 12px;
-  z-index: 16;
-  position: relative;
-  white-space: nowrap;
-  margin-top: 58px;
-  margin-bottom: 10px;
-}
 
 /* --- なおちゃん --- */
 .naochan {
@@ -136,12 +123,10 @@ header img {
   width: 100%;
   padding: 16px 0;
   border: none;
-  border-bottom: 5px solid #3a8a3a;
   border-radius: 50px;
-  background: #54b354;
-  color: white;
   font-family: 'Kosugi Maru', sans-serif;
   font-size: 22px;
+  color: white;
   cursor: pointer;
   letter-spacing: 0.05em;
 }
@@ -149,4 +134,16 @@ header img {
 .button-wrapper button:active {
   border-bottom-width: 2px;
   transform: translateY(3px);
+}
+
+.btn-itadakimasu {
+  background: #f5c842;
+  border-bottom: 5px solid #c9980e;
+  color: #5a3a00;
+}
+
+.btn-gochisou {
+  display: none;
+  background: #54b354;
+  border-bottom: 5px solid #3a8a3a;
 }

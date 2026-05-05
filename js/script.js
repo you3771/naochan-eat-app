@@ -2,8 +2,8 @@ window.addEventListener("DOMContentLoaded", () => {
   const foodImages = document.querySelectorAll(".foods img");
   const naochan = document.querySelector(".naochan");
   const meter = document.querySelector(".meter img");
-  const button = document.querySelector(".button-wrapper button");
-  const tapGuide = document.querySelector(".tap-guide");
+  const btnItadakimasu = document.querySelector(".btn-itadakimasu");
+  const btnGochisou = document.querySelector(".btn-gochisou");
 
   const sounds = {
     itadakimasu: new Audio("sound/voice_itadakimasu.mp3"),
@@ -14,28 +14,39 @@ window.addEventListener("DOMContentLoaded", () => {
 
   let eating = false;
   let eatCount = 0;
-  let hasStarted = false; // ← 新規追加：開始フラグ
+  let hasStarted = false;
 
-  // 最初は食べ物のクリックを無効にする
+  function startGame() {
+    if (hasStarted) return;
+    hasStarted = true;
+    btnItadakimasu.style.display = "none";
+    btnGochisou.style.display = "block";
+
+    naochan.src = "naochan/naochan_full.png";
+    sounds.itadakimasu.play();
+    sounds.itadakimasu.onended = () => {
+      naochan.src = "naochan/naochan_normal.png";
+    };
+  }
+
+  btnItadakimasu.addEventListener("click", startGame);
+  naochan.addEventListener("click", startGame);
+
   foodImages.forEach(img => {
     img.addEventListener("click", async () => {
       if (!hasStarted || eating || eatCount >= 3) return;
       eating = true;
 
-      // パク音
       sounds.paku.currentTime = 0;
       await sounds.paku.play();
 
-      // なおちゃんの画像切り替え
       naochan.src = "naochan/naochan_eating.png";
 
-      // モグモグ音（少し待ってから）
       setTimeout(() => {
         sounds.mogumogu.currentTime = 0;
         sounds.mogumogu.play();
       }, 400);
 
-      // モグモグ終了後（仮に2秒後）
       setTimeout(() => {
         naochan.src = "naochan/naochan_normal.png";
         img.style.display = "none";
@@ -51,26 +62,7 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-// なおちゃんをタップしたらスタート！
-naochan.addEventListener("click", () => {
-  if (hasStarted) return; // 2回以上再生しない
-  hasStarted = true;
-  tapGuide.style.display = "none";
-
-  // 画像を「いただきます」用に差し替え
-  naochan.src = "naochan/naochan_full.png";
-
-  // 音声再生
-  sounds.itadakimasu.play();
-
-  // 再生終了後に画像を元に戻す
-  sounds.itadakimasu.onended = () => {
-    naochan.src = "naochan/naochan_normal.png";
-  };
-});
-
-  // ごちそうさまボタン
-  button.addEventListener("click", () => {
+  btnGochisou.addEventListener("click", () => {
     if (eating) return;
     sounds.gochisousama.play();
     eatCount = 0;
@@ -78,6 +70,7 @@ naochan.addEventListener("click", () => {
     meter.src = "ui/meter_0.png";
     naochan.src = "naochan/naochan_normal.png";
     foodImages.forEach(img => (img.style.display = "inline"));
-    tapGuide.style.display = "block";
+    btnGochisou.style.display = "none";
+    btnItadakimasu.style.display = "block";
   });
 });
