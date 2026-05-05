@@ -18,7 +18,7 @@ window.addEventListener("DOMContentLoaded", () => {
   // 最初は食べ物のクリックを無効にする
   foodImages.forEach(img => {
     img.addEventListener("click", async () => {
-      if (!hasStarted || eating) return;
+      if (!hasStarted || eating || eatCount >= 3) return;
       eating = true;
 
       // パク音
