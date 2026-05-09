@@ -28,48 +28,41 @@ body {
   box-sizing: border-box;
 }
 
-/* --- ヘッダー（ロゴのみ） --- */
+/* --- ヘッダー（ロゴ＋メーター） --- */
 header {
-  height: 65px;
+  height: auto;
   background-color: #f48ca7;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  padding: 8px 0 10px;
 }
 
-header img {
-  height: 100%;
-  width: auto;
-  max-width: 85%;
-  object-fit: contain;
+header > img {
+  width: 80%;
+  height: auto;
   display: block;
 }
 
-/* --- メーター（ヘッダー直下に固定） --- */
+/* --- メーター（ヘッダー内） --- */
 .meter {
-  position: absolute;
-  top: 65px;
-  left: 0;
-  right: 0;
-  background-color: #f48ca7;
-  padding: 5px 8% 8px;
-  box-sizing: border-box;
-  z-index: 15;
+  width: 62%;
+  margin: 6px auto 0;
 }
 
 .meter img {
-  width: 75%;
+  width: 100%;
   height: auto;
   display: block;
-  margin: 0 auto;
 }
 
 
 /* --- なおちゃん --- */
 .naochan {
   position: absolute;
-  bottom: 240px;
+  bottom: 230px;
   left: 50%;
   transform: translateX(-50%);
   width: 90%;
@@ -91,7 +84,7 @@ header img {
 /* --- 食材 --- */
 .foods {
   position: absolute;
-  bottom: 110px;
+  bottom: 145px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 3;
@@ -101,11 +94,11 @@ header img {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-bottom: 0px;
+  margin-bottom: -18px;
 }
 
 .foods img {
-  width: 40%;
+  width: 50%;
   height: auto;
 }
 
@@ -134,6 +127,30 @@ header img {
 .button-wrapper button:active {
   border-bottom-width: 2px;
   transform: translateY(3px);
+}
+
+/* --- お祝いアニメーション --- */
+.celebration-item {
+  position: absolute;
+  top: -60px;
+  z-index: 20;
+  pointer-events: none;
+  user-select: none;
+  animation: fall linear forwards;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(900px) rotate(540deg);
+    opacity: 0;
+  }
 }
 
 .btn-itadakimasu {
