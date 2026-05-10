@@ -48,14 +48,36 @@ header > img {
 
 /* --- メーター（ヘッダー内） --- */
 .meter {
-  width: 62%;
+  width: 92%;
   margin: 6px auto 0;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
 }
 
-.meter img {
-  width: 100%;
-  height: auto;
-  display: block;
+.meter-slot {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  border: 2px dashed rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  transition: background 0.2s, border 0.2s;
+}
+
+.meter-slot.filled {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid white;
+}
+
+.meter-slot img {
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
 }
 
 

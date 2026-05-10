@@ -1,6 +1,6 @@
 window.addEventListener("DOMContentLoaded", () => {
   const naochan = document.querySelector(".naochan");
-  const meter = document.querySelector(".meter img");
+  const meterDiv = document.querySelector(".meter");
   const btnItadakimasu = document.querySelector(".btn-itadakimasu");
   const btnGochisou = document.querySelector(".btn-gochisou");
 
@@ -33,6 +33,26 @@ window.addEventListener("DOMContentLoaded", () => {
   let eating = false;
   let eatCount = 0;
   let hasStarted = false;
+
+  // --- メータースロットを5つ生成 ---
+  function setupMeter() {
+    meterDiv.innerHTML = "";
+    for (let i = 0; i < 5; i++) {
+      const slot = document.createElement("div");
+      slot.classList.add("meter-slot");
+      meterDiv.appendChild(slot);
+    }
+  }
+
+  // --- 食べた食材をスロットに追加 ---
+  function updateMeter(src) {
+    const slots = meterDiv.querySelectorAll(".meter-slot:not(.filled)");
+    if (slots.length === 0) return;
+    const img = document.createElement("img");
+    img.src = src;
+    slots[0].appendChild(img);
+    slots[0].classList.add("filled");
+  }
 
   // --- ランダムに5つ選んで食べ物エリアを生成 ---
   function setupFoods() {
@@ -70,7 +90,7 @@ window.addEventListener("DOMContentLoaded", () => {
   document.querySelector(".foods").addEventListener("click", async (e) => {
     const img = e.target.closest("img");
     if (!img) return;
-    if (!hasStarted || eating || eatCount >= 3) return;
+    if (!hasStarted || eating || eatCount >= 5) return;
     eating = true;
 
     sounds.paku.currentTime = 0;
@@ -87,10 +107,8 @@ window.addEventListener("DOMContentLoaded", () => {
       naochan.src = "naochan/naochan_normal.png";
       img.style.display = "none";
       eatCount++;
-      if (eatCount <= 3) {
-        meter.src = `ui/meter_${eatCount}.png`;
-      }
-      if (eatCount >= 3) {
+      updateMeter(img.src);
+      if (eatCount >= 5) {
         naochan.src = "naochan/naochan_full.png";
         celebrate();
       }
@@ -143,7 +161,7 @@ window.addEventListener("DOMContentLoaded", () => {
     sounds.gochisousama.play();
     eatCount = 0;
     hasStarted = false;
-    meter.src = "ui/meter_0.png";
+    setupMeter();
     naochan.src = "naochan/naochan_normal.png";
     setupFoods(); // 新しいランダム5品をセット
     btnGochisou.style.display = "none";
@@ -151,5 +169,6 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   // --- 初期表示 ---
+  setupMeter();
   setupFoods();
 });
