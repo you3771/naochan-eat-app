@@ -1,26 +1,21 @@
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", async () => {
   const naochan = document.querySelector(".naochan");
   const meterDiv = document.querySelector(".meter");
   const btnItadakimasu = document.querySelector(".btn-itadakimasu");
   const btnGochisou = document.querySelector(".btn-gochisou");
 
-  // ======================================================
-  // 食べ物リスト：画像を追加する時はここに1行足すだけ！
-  // ファイルは food/ フォルダに置いてください。
-  // ======================================================
-  const ALL_FOODS = [
-    { src: "food/blueberry_food.png",   alt: "ブルーベリー" },
-    { src: "food/broccoli_food.png",    alt: "ブロッコリー" },
-    { src: "food/fish_food.png",        alt: "さかな" },
-    { src: "food/nikuman_food.png",     alt: "肉まん" },
-    { src: "food/onigiri_food.png",     alt: "おにぎり" },
-    { src: "food/orange_food.png",      alt: "オレンジ" },
-    { src: "food/takoyaki_food.png",    alt: "たこやき" },
-    { src: "food/tamagoyaki_food.png",  alt: "たまごやき" },
-    { src: "food/tomato_food.png",      alt: "トマト" },
-    { src: "food/udon_food.png",        alt: "うどん" },
-    { src: "food/yogurt_food.png",      alt: "ヨーグルト" },
-  ];
+  // 食べ物リストは foods.json から自動取得
+  // food/ に画像・sound/ に音源を追加してプッシュするだけで自動反映されます
+  let ALL_FOODS = [];
+
+  async function loadFoods() {
+    const res = await fetch('foods.json');
+    const names = await res.json();
+    ALL_FOODS = names.map(name => ({
+      src: `food/${name}_food.png`,
+      alt: name
+    }));
+  }
 
   const sounds = {
     itadakimasu: new Audio("sound/voice_itadakimasu.mp3"),
@@ -55,7 +50,8 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   // --- ランダムに5つ選んで食べ物エリアを生成 ---
-  function setupFoods() {
+  async function setupFoods() {
+    if (ALL_FOODS.length === 0) await loadFoods();
     const foodsDiv = document.querySelector(".foods");
     foodsDiv.innerHTML = "";
 
@@ -87,21 +83,21 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   // --- 食べ物クリック（イベント委譲） ---
-  document.querySelector(".foods").addEventListener("click", async (e) => {
+  document.querySelector(".foods").addEventListener("click", (e) => {
     const img = e.target.closest("img");
     if (!img) return;
     if (!hasStarted || eating || eatCount >= 5) return;
     eating = true;
 
-    sounds.paku.currentTime = 0;
-    await sounds.paku.play();
-
-    naochan.src = "naochan/naochan_eating.png";
-
-    setTimeout(() => {
-      sounds.mogumogu.currentTime = 0;
-      sounds.mogumogu.play();
-    }, 400);
+    // 1. 食べ物の名前を読み上げ → 終わったら 2. パク音
+    const foodName = img.src.split('/').pop().replace('_food.png', '');
+    const nameVoice = new Audio(`sound/${foodName}_voice.mp3`);
+    nameVoice.play();
+    nameVoice.onended = () => {
+      sounds.paku.currentTime = 0;
+      sounds.paku.play();
+      naochan.src = "naochan/naochan_eating.png";
+    };
 
     setTimeout(() => {
       naochan.src = "naochan/naochan_normal.png";
@@ -156,19 +152,19 @@ window.addEventListener("DOMContentLoaded", () => {
   naochan.addEventListener("click", startGame);
 
   // --- リセット ---
-  btnGochisou.addEventListener("click", () => {
+  btnGochisou.addEventListener("click", async () => {
     if (eating) return;
     sounds.gochisousama.play();
     eatCount = 0;
     hasStarted = false;
     setupMeter();
     naochan.src = "naochan/naochan_normal.png";
-    setupFoods(); // 新しいランダム5品をセット
+    await setupFoods(); // 新しいランダム5品をセット
     btnGochisou.style.display = "none";
     btnItadakimasu.style.display = "block";
   });
 
   // --- 初期表示 ---
   setupMeter();
-  setupFoods();
+  await setupFoods();
 });

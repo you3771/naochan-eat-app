@@ -1,0 +1,31 @@
+name: 食べ物リストを自動更新
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'food/**'
+
+jobs:
+  update-foods:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: foods.jsonを生成
+        run: |
+          ls food/*_food.png \
+            | xargs -I{} basename {} _food.png \
+            | sort \
+            | jq -R . | jq -s . > foods.json
+
+      - name: 変更があればコミット＆プッシュ
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add foods.json
+          git diff --staged --quiet || git commit -m "🍱 foods.json を自動更新"
+          git push
