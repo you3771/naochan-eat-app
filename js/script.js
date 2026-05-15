@@ -93,11 +93,13 @@ window.addEventListener("DOMContentLoaded", async () => {
     const foodName = img.src.split('/').pop().replace('_food.png', '');
     const nameVoice = new Audio(`sound/${foodName}_voice.mp3`);
     nameVoice.play();
-    nameVoice.onended = () => {
+
+    // onended はiOSで後続のplay()をブロックするため、setTimeoutで代替
+    setTimeout(() => {
       sounds.paku.currentTime = 0;
       sounds.paku.play();
       naochan.src = "naochan/naochan_eating.png";
-    };
+    }, 1500);
 
     setTimeout(() => {
       naochan.src = "naochan/naochan_normal.png";
@@ -109,7 +111,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         celebrate();
       }
       eating = false;
-    }, 2000);
+    }, 2500);
   });
 
   // --- お祝いアニメーション ---
